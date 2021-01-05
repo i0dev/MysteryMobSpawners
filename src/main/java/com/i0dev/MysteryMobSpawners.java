@@ -85,7 +85,7 @@ public final class MysteryMobSpawners extends JavaPlugin {
         getConfig().options().copyDefaults(true);
         saveConfig();
         loadConfig();
-        this.loadSpawnerChances();
+        loadSpawnerChances();
 
 
     }
