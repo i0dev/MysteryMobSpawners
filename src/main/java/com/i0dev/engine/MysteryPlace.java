@@ -65,36 +65,38 @@ public class MysteryPlace implements Listener {
         item.setSmall(true);
         item.setVisible(false);
         item.setMarker(true);
-        ArmorStandUtil.playSound(player, Sound.CHICKEN_EGG_POP, 20L);
 
+        ArmorStandUtil.playSound(player, Sound.CHICKEN_EGG_POP, 20L);
         ArmorStandUtil.setSmallRunnable(item, 20L);
         ArmorStandUtil.playSound(player, Sound.EXPLODE, 50L);
         ArmorStandUtil.setNewItem(item, new ItemStack(Material.DRAGON_EGG), 50L, Effect.EXPLOSION_HUGE, e.getPlayer());
         ArmorStandUtil.particleRunner(item, e.getPlayer(), 1, 20L, ParticleEffect.CRIT_MAGIC);
         ArmorStandUtil.particleRunnerAdvanced(item, e.getPlayer(), 1, 20L, ParticleEffect.SUSPENDED_DEPTH);
         ArmorStandUtil.particleRunner(item, e.getPlayer(), 1, 50L, ParticleEffect.PORTAL);
+
         ArmorStandUtil.playSound(player, Sound.LEVEL_UP, 120L);
 
         new BukkitRunnable() {
             @Override
             public void run() {
                 actionLocation.getWorld().playEffect(actionLocation, Effect.EXPLOSION_LARGE, 4000);
-                item.setCustomName(ChatColor.translateAlternateColorCodes('&', Type));
-                ArmorStandUtil.playSound(player, Sound.EXPLODE, 1L);
-                actionLocation.getWorld().playEffect(actionLocation.add(0, 1.24, 0), Effect.VILLAGER_THUNDERCLOUD, 4000);
-                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', MysteryMobSpawners.givenSpawnerMessage.replace("%DISPLAYNAME%", Type)));
-                item.setHelmet(TranslateSkulls.translateMobSkull(RandomSpawner));
                 ArmorStandUtil.playEffect(actionLocation, ParticleEffect.FLAME, 1L, e.getPlayer());
                 ArmorStandUtil.playEffect(actionLocation.add(0, -.75, 0), ParticleEffect.LAVA, 1L, e.getPlayer());
                 ArmorStandUtil.playEffect(actionLocation.add(0, -.75, 0), ParticleEffect.LAVA, 3L, e.getPlayer());
                 ArmorStandUtil.playEffect(actionLocation.add(0, -.75, 0), ParticleEffect.LAVA, 6L, e.getPlayer());
+                ArmorStandUtil.playSound(player, Sound.EXPLODE, 1L);
+
+                item.setCustomName(ChatColor.translateAlternateColorCodes('&', Type));
+                actionLocation.getWorld().playEffect(actionLocation.add(0, 1.24, 0), Effect.VILLAGER_THUNDERCLOUD, 4000);
+                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', MysteryMobSpawners.givenSpawnerMessage.replace("%DISPLAYNAME%", Type)));
+                item.setHelmet(TranslateSkulls.translateMobSkull(RandomSpawner));
+
             }
         }.runTaskLaterAsynchronously(MysteryMobSpawners.get(), 100L);
         new BukkitRunnable() {
             @Override
             public void run() {
                 String command = (String) Command.next();
-
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("%player%", player.getName()));
             }
         }.runTaskLater(MysteryMobSpawners.get(), 125L);
@@ -102,6 +104,7 @@ public class MysteryPlace implements Listener {
             @Override
             public void run() {
                 item.remove();
+
                 ArmorStandUtil.playEffectMultiple(actionLocation, ParticleEffect.CLOUD, 1L, e.getPlayer(), 10);
                 ArmorStandUtil.playSound(player, Sound.FIZZ, 1L);
 
