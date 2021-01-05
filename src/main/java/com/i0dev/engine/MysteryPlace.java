@@ -10,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -72,11 +71,11 @@ public class MysteryPlace implements Listener {
         item.setSmall(true);
         item.setVisible(false);
         item.setMarker(true);
-
+        item.setHeadPose(new EulerAngle(0, 60, 0));
+        ArmorStandUtil.spinHead(item, 0, 1L, 180);
         MysteryMobSpawners.get().getChunkLoading().addChunk(e.getClickedBlock().getChunk());
-
         ArmorStandUtil.playSound(player, Sound.CHICKEN_EGG_POP, 20L);
-        ArmorStandUtil.setSmallRunnable(item, 20L);
+        ArmorStandUtil.setSmallRunnable(item, 20L, false);
         ArmorStandUtil.playSound(player, Sound.EXPLODE, 50L);
         ArmorStandUtil.setNewItem(item, new ItemStack(Material.DRAGON_EGG), 50L, Effect.EXPLOSION_HUGE, e.getPlayer());
         ArmorStandUtil.particleRunner(item, e.getPlayer(), 1, 20L, ParticleEffect.CRIT_MAGIC);
@@ -98,19 +97,8 @@ public class MysteryPlace implements Listener {
                 item.setCustomName(ChatColor.translateAlternateColorCodes('&', Type));
                 actionLocation.getWorld().playEffect(actionLocation.add(0, 1.24, 0), Effect.VILLAGER_THUNDERCLOUD, 4000);
                 e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', MysteryMobSpawners.givenSpawnerMessage.replace("%DISPLAYNAME%", Type)));
+
                 item.setHelmet(TranslateSkulls.translateMobSkull(RandomSpawner));
-                AtomicInteger counter = new AtomicInteger(0);
-                Bukkit.getScheduler().runTaskTimerAsynchronously(instance, () -> {
-                    if (counter.get() >= 90) {
-                        cancel();
-                        return;
-                    }
-                    EulerAngle angle = new EulerAngle(0.0, Math.toRadians(item.getHeadPose().getY() + (4.0 * counter.get())), 0.0);
-                    item.setHeadPose(angle);
-
-                    counter.getAndIncrement();
-
-                }, 0L, 1);
 
             }
         }.runTaskLaterAsynchronously(MysteryMobSpawners.get(), 100L);
@@ -136,6 +124,4 @@ public class MysteryPlace implements Listener {
             }
         }.runTaskLater(MysteryMobSpawners.get(), 190L);
     }
-
-
 }

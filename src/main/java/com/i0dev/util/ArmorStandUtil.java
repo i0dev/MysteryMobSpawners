@@ -9,16 +9,17 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ArmorStandUtil {
     private static boolean doSounds = MysteryMobSpawners.soundsEnabled;
     private static boolean doParticles = MysteryMobSpawners.particlesEnabled;
 
-    public static void setSmallRunnable(ArmorStand item, long delay) {
+    public static void setSmallRunnable(ArmorStand item, long delay, boolean bool) {
         new BukkitRunnable() {
             @Override
             public void run() {
-                item.setSmall(false);
+                item.setSmall(bool);
 
             }
         }.runTaskLaterAsynchronously(MysteryMobSpawners.get(), delay);
@@ -121,7 +122,6 @@ public class ArmorStandUtil {
                 public void run() {
                     double size = 0.5;
                     for (int i = 0; i < 360; i = i + randomize) {
-
                         double angle = (i * Math.PI / 180);
                         double x = size * Math.cos(angle);
                         double z = size * Math.sin(angle);
@@ -184,5 +184,25 @@ public class ArmorStandUtil {
 
             }.runTaskLaterAsynchronously(MysteryMobSpawners.get(), delay);
         }
+    }
+
+    public static void spinHead(ArmorStand item, long delay, long interval, int runTime) {
+
+        AtomicInteger counter = new AtomicInteger(0);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (counter.get() >= runTime) {
+                    cancel();
+                    return;
+                }
+                EulerAngle angle = new EulerAngle(0.0, Math.toRadians(item.getHeadPose().getY() + (1.0 * counter.get())), 0.0);
+                item.setHeadPose(angle);
+
+                counter.getAndIncrement();
+            }
+
+        }.runTaskTimerAsynchronously(MysteryMobSpawners.get(), delay, (interval / 2) / 2);
+
     }
 }
