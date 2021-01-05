@@ -9,7 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -41,8 +43,9 @@ public class MysteryPlace implements Listener {
             priority = EventPriority.HIGH,
             ignoreCancelled = true
     )
-    public void onMysteryOpen(BlockPlaceEvent e) {
-        if (e.getBlockPlaced().getType() == null) return;
+    public void onMysteryOpen(PlayerInteractEvent e) {
+        if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if (e.getItem().getType() == null) return;
         if (!e.getPlayer().getItemInHand().hasItemMeta()) return;
         if (!e.getPlayer().getItemInHand().getItemMeta().hasDisplayName()) return;
         if (!e.getPlayer().getItemInHand().getItemMeta().getDisplayName().equals(MysteryMobSpawners.getItemStack().getItemMeta().getDisplayName()))
@@ -51,8 +54,10 @@ public class MysteryPlace implements Listener {
             return;
         e.setCancelled(true);
         Player player = e.getPlayer();
+        ArmorStandUtil.playSound(player, Sound.FIREWORK_LAUNCH, 1L);
+
         PlayerUtils.removeOneItemInHandFromPlayer(player);
-        Location actionLocation = e.getBlockPlaced().getLocation();
+        Location actionLocation = e.getClickedBlock().getLocation().add(0, 1, 0);
         String RandomSpawner = getRandomSpawner();
         Iterator Command = this.instance.getConfig().getStringList("spawners." + RandomSpawner + ".command").iterator();
         String Type = this.instance.getConfig().getString("spawners." + RandomSpawner + ".displayName");
