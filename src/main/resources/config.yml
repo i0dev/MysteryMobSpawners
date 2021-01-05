@@ -1,3 +1,8 @@
+###########################################
+#                                         #
+#      Plugin made by i01 @i0dev.com      #
+#                                         #
+###########################################
 particlesEnabled: true
 givenSpawnerMessage: "&7You have been given a &7%DISPLAYNAME%!"
 hologramName: "&c&lMystery Mob Spawner"
