@@ -1,6 +1,6 @@
 package com.i0dev.util;
 
-import org.bukkit.entity.EntityType;
+
 import org.bukkit.inventory.ItemStack;
 
 public class TranslateSkulls {

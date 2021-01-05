@@ -94,7 +94,7 @@ public class ArmorStandUtil {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    double size = 1.1;
+                    double size = 0.1;
                     for (int i = 0; i < 360; i = i + randomize) {
 
                         double angle = (i * Math.PI / 180);

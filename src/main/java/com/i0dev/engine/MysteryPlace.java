@@ -14,10 +14,12 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.EulerAngle;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MysteryPlace implements Listener {
     private MysteryMobSpawners instance;
@@ -71,6 +73,8 @@ public class MysteryPlace implements Listener {
         item.setVisible(false);
         item.setMarker(true);
 
+        MysteryMobSpawners.get().getChunkLoading().addChunk(e.getClickedBlock().getChunk());
+
         ArmorStandUtil.playSound(player, Sound.CHICKEN_EGG_POP, 20L);
         ArmorStandUtil.setSmallRunnable(item, 20L);
         ArmorStandUtil.playSound(player, Sound.EXPLODE, 50L);
@@ -95,6 +99,18 @@ public class MysteryPlace implements Listener {
                 actionLocation.getWorld().playEffect(actionLocation.add(0, 1.24, 0), Effect.VILLAGER_THUNDERCLOUD, 4000);
                 e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', MysteryMobSpawners.givenSpawnerMessage.replace("%DISPLAYNAME%", Type)));
                 item.setHelmet(TranslateSkulls.translateMobSkull(RandomSpawner));
+                AtomicInteger counter = new AtomicInteger(0);
+                Bukkit.getScheduler().runTaskTimerAsynchronously(instance, () -> {
+                    if (counter.get() >= 90) {
+                        cancel();
+                        return;
+                    }
+                    EulerAngle angle = new EulerAngle(0.0, Math.toRadians(item.getHeadPose().getY() + (4.0 * counter.get())), 0.0);
+                    item.setHeadPose(angle);
+
+                    counter.getAndIncrement();
+
+                }, 0L, 1);
 
             }
         }.runTaskLaterAsynchronously(MysteryMobSpawners.get(), 100L);
@@ -108,14 +124,17 @@ public class MysteryPlace implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                item.remove();
-
                 ArmorStandUtil.playEffectMultiple(actionLocation, ParticleEffect.CLOUD, 1L, e.getPlayer(), 10);
                 ArmorStandUtil.playSound(player, Sound.FIZZ, 1L);
-
-
             }
-        }.runTaskLaterAsynchronously(MysteryMobSpawners.get(), 200L);
+        }.runTaskLaterAsynchronously(MysteryMobSpawners.get(), 190L);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                item.remove();
+                MysteryMobSpawners.get().getChunkLoading().removeChunk(e.getClickedBlock().getChunk());
+            }
+        }.runTaskLater(MysteryMobSpawners.get(), 190L);
     }
 
 

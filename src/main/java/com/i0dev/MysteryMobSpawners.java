@@ -2,31 +2,27 @@ package com.i0dev;
 
 import com.i0dev.cmd.GiveMysteryMob;
 import com.i0dev.engine.MysteryPlace;
+import com.i0dev.util.ChunkLoading;
 import com.i0dev.util.CreateItemStack;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 
 public final class MysteryMobSpawners extends JavaPlugin {
     @Override
     public void onEnable() {
         System.out.println("Enabled Mystery Mob Spawners");
         getServer().getPluginManager().registerEvents(new MysteryPlace(this), this);
+        chunkLoading = new ChunkLoading(this);
+        getServer().getPluginManager().registerEvents(chunkLoading, this);
         getCommand("mms").setExecutor(new GiveMysteryMob(this));
         getConfig().options().copyDefaults(true);
         saveConfig();
         loadConfig();
         loadSpawnerChances();
-
-
     }
 
     @Override
@@ -76,25 +72,28 @@ public final class MysteryMobSpawners extends JavaPlugin {
 
     public void loadSpawnerChances() {
         ConfigurationSection mobsSection = this.getConfig().getConfigurationSection("spawners");
-        Iterator var2 = mobsSection.getKeys(false).iterator();
 
-        while (var2.hasNext()) {
-            String mob = (String) var2.next();
+        for (String mob : mobsSection.getKeys(false)) {
             this.spawnerChances.put(mob, mobsSection.getDouble(mob + ".chance"));
         }
 
     }
 
     private static MysteryMobSpawners i;
+    private ChunkLoading chunkLoading;
 
     public static MysteryMobSpawners get() {
         return i;
     }
 
-    private HashMap<String, Double> spawnerChances = new HashMap();
+    private final HashMap<String, Double> spawnerChances = new HashMap();
 
     public MysteryMobSpawners() {
         MysteryMobSpawners.i = this;
+    }
+
+    public ChunkLoading getChunkLoading() {
+        return chunkLoading;
     }
 
     public HashMap<String, Double> getSpawnerChances() {
