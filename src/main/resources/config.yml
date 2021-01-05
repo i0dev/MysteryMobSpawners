@@ -4,7 +4,7 @@
 #                                         #
 ###########################################
 particlesEnabled: true
-givenSpawnerMessage: "&7You have been given a &7%DISPLAYNAME%!"
+soundsEnabled: true
 hologramName: "&c&lMystery Mob Spawner"
 mobSpawnerItem:
   material: MOB_SPAWNER
@@ -21,6 +21,7 @@ mobSpawnerItem:
     - ' &4* &7Creeper'
     - ' &4* &7Squid'
     - ' &4* &7Endermite'
+    - ' &4* &7Charged Creeper'
 spawners:
   'snowman':
     chance: 50
@@ -52,11 +53,16 @@ spawners:
     displayName: "&d&lEndermite &7Spawner"
     command:
       - 'ss give %player% endermite 1'
-
+  'charged_creeper':
+    chance: 2.5
+    displayName: "&a&lCharged Creeper &7Spawner"
+    command:
+      - 'mobextras chargedcreeper %player% 1'
 
 Messaging:
+  Mystery_Mob_Spawner_Spawner_Give: "&7You have been given a &7%DISPLAYNAME%!"
   Reload_Successful: '&7You successfully reloaded the plugin!'
-  Reload_Usage: '&7Please use &9/mms reload &7to reload the plugin!'
+  Reload_Usage: '&7Please use &c/mms reload &7to reload the plugin!'
   Mystery_Mob_Spawner_Give_Usage: '&7Please use &c/mms Give [Player] <amount>&7!'
   Mystery_Mob_Spawner_Give_Unknown_Member_Error: '&cError: &7Unknown Member. Please try again!'
   Mystery_Mob_Spawner_Give_Amount_Error: '&cError: &7Unknown amount. Please enter a valid
