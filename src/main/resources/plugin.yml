@@ -1,0 +1,26 @@
+name: MysteryMobSpawners
+version: ${project.version}
+main: com.i0dev.MysteryMobSpawners
+authors: [ i01 ]
+description: Receivce a mystery spawner from a predefined set
+website: i0dev.com
+commands:
+  mms:
+    description: base command for Mystery Mob Spawners.
+permissions:
+  mms.reload:
+    description: Gives you permission to reload Mystery Mob Spawners plugin.
+    default: false
+  mms.give:
+    description: Gives you permission to give others Mystery Mob Spawners.
+    default: false
+  mms.place:
+    description: Gives you permission to place Mystery Mob Spawners.
+    default: true
+  mms.*:
+    description: Gives you all permissions for all Mystery Mob Spawners commands.
+    default: false
+    children:
+      mms.reload: true
+      mms.give: true
+      mms.place: true
