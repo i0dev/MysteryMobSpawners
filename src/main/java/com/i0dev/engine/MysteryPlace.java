@@ -89,9 +89,9 @@ public class MysteryPlace implements Listener {
             public void run() {
                 actionLocation.getWorld().playEffect(actionLocation, Effect.EXPLOSION_LARGE, 4000);
                 ArmorStandUtil.playEffect(actionLocation, ParticleEffect.FLAME, 1L, e.getPlayer());
-                ArmorStandUtil.playEffect(actionLocation.add(0, -.75, 0), ParticleEffect.LAVA, 1L, e.getPlayer());
-                ArmorStandUtil.playEffect(actionLocation.add(0, -.75, 0), ParticleEffect.LAVA, 3L, e.getPlayer());
-                ArmorStandUtil.playEffect(actionLocation.add(0, -.75, 0), ParticleEffect.LAVA, 6L, e.getPlayer());
+                ArmorStandUtil.playEffectMultiple(actionLocation.add(0, -.75, 0), ParticleEffect.LAVA, 1L, e.getPlayer(), 5);
+                ArmorStandUtil.playEffectMultiple(actionLocation.add(0, -.75, 0), ParticleEffect.LAVA, 3L, e.getPlayer(), 5);
+                ArmorStandUtil.playEffectMultiple(actionLocation.add(0, -.75, 0), ParticleEffect.LAVA, 6L, e.getPlayer(), 5);
                 ArmorStandUtil.playSound(player, Sound.EXPLODE, 1L);
 
                 item.setCustomName(ChatColor.translateAlternateColorCodes('&', Type));

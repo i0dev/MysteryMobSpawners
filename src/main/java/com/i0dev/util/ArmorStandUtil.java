@@ -30,59 +30,25 @@ public class ArmorStandUtil {
             @Override
             public void run() {
                 if (doParticles) {
-
                     item.getWorld().playEffect(item.getLocation().add(0, 1.24, 0), effect, 4000);
                 }
-                if (doSounds) {
-                    playSound(player, Sound.PORTAL, 10L);
-                }
+
                 item.setHelmet(newItem);
 
-                crack(item, 10L, 15, player);
                 if (doSounds) {
-
-                    playSound(player, Sound.CREEPER_HISS, 10L);
+                    playSound(player, Sound.PORTAL, 9L);
+                    playEffectMultiple(item.getLocation(), ParticleEffect.CLOUD, 10L, player, 5);
+                    playSound(player, Sound.ENDERDRAGON_HIT, 10L);
+                    playEffectMultiple(item.getLocation(), ParticleEffect.CLOUD, 13L, player, 5);
+                    playSound(player, Sound.ENDERDRAGON_HIT, 13L);
+                    playEffectMultiple(item.getLocation(), ParticleEffect.CLOUD, 20L, player, 5);
+                    playSound(player, Sound.ENDERDRAGON_HIT, 20L);
+                    playEffectMultiple(item.getLocation(), ParticleEffect.CLOUD, 25L, player, 5);
+                    playSound(player, Sound.ENDERDRAGON_HIT, 25L);
+                    playEffectMultiple(item.getLocation(), ParticleEffect.CLOUD, 30L, player, 5);
+                    playSound(player, Sound.ENDERDRAGON_HIT, 30L);
                 }
-                normal(item, 12L);
-                crack(item, 13L, -15, player);
-                if (doSounds) {
 
-                    playSound(player, Sound.CREEPER_HISS, 13L);
-                }
-                normal(item, 17L);
-                crack(item, 20L, 15, player);
-                if (doSounds) {
-
-                    playSound(player, Sound.CREEPER_HISS, 20L);
-                }
-                normal(item, 23L);
-            }
-        }.runTaskLaterAsynchronously(MysteryMobSpawners.get(), delay);
-
-    }
-
-    public static void crack(ArmorStand item, long delay, double angleD, Player player) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                EulerAngle angle = new EulerAngle((Math.toRadians(angleD)), 0, 0);
-                if (doSounds) {
-
-                    playSound(player, Sound.ITEM_BREAK, 1L);
-                }
-                item.setHeadPose(angle);
-
-            }
-        }.runTaskLaterAsynchronously(MysteryMobSpawners.get(), delay);
-
-    }
-
-    public static void normal(ArmorStand item, long delay) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                EulerAngle angle = new EulerAngle((Math.toRadians(0)), 0, 0);
-                item.setHeadPose(angle);
 
             }
         }.runTaskLaterAsynchronously(MysteryMobSpawners.get(), delay);
