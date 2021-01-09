@@ -46,7 +46,7 @@ public class MysteryPlace implements Listener {
     )
     public void onMysteryOpen(PlayerInteractEvent e) {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-        if (e.getItem().getType() == null) return;
+        if (e.getItem().getType().equals(Material.AIR)) return;
         if (!e.getPlayer().getItemInHand().hasItemMeta()) return;
         if (!e.getPlayer().getItemInHand().getItemMeta().hasDisplayName()) return;
         if (!e.getPlayer().getItemInHand().getItemMeta().getDisplayName().equals(MysteryMobSpawners.getItemStack().getItemMeta().getDisplayName()))
