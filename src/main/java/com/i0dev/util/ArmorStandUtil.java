@@ -47,6 +47,8 @@ public class ArmorStandUtil {
                     playSound(player, Sound.ENDERDRAGON_HIT, 25L);
                     playEffectMultiple(item.getLocation(), ParticleEffect.CLOUD, 30L, player, 5);
                     playSound(player, Sound.ENDERDRAGON_HIT, 30L);
+                    playEffectMultiple(item.getLocation(), ParticleEffect.CLOUD, 35L, player, 5);
+                    playSound(player, Sound.ENDERDRAGON_HIT, 35L);
                 }
 
 
