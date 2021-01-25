@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -24,6 +25,7 @@ public class GiveMysteryMob implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
 
+        boolean isConsole = sender instanceof ConsoleCommandSender;
 
         try {
             sender = (Player) sender;
@@ -44,41 +46,42 @@ public class GiveMysteryMob implements CommandExecutor {
 
             }
             if (args.length == 2 && args[0].equalsIgnoreCase("give")) {
-                try {
-                    Player player2give = Bukkit.getServer().getPlayer(args[1]);
-                    int GiveAmount = 1;
-                    player2give.getInventory().addItem(MysteryMobSpawners.getItemStack());
-                    String new_Chunk_Buster_Received = i.Mystery_Mob_Spawner_Received;
-                    String new_Mystery_Mob_Spawner_Give_Success = i.Mystery_Mob_Spawner_Give_Success;
-                    if (new_Mystery_Mob_Spawner_Give_Success.contains("{amount}")) {
-                        new_Mystery_Mob_Spawner_Give_Success = new_Mystery_Mob_Spawner_Give_Success.replace("{amount}", GiveAmount + "");
-                    }
-                    if (new_Mystery_Mob_Spawner_Give_Success.contains("{player}")) {
-                        new_Mystery_Mob_Spawner_Give_Success = new_Mystery_Mob_Spawner_Give_Success.replace("{player}", player2give.getName() + "");
-                    }
+                if (sender.hasPermission("mms.give") || (sender.isOp()) || isConsole || sender.getName().equalsIgnoreCase("console")) {
+                    try {
+                        Player player2give = Bukkit.getServer().getPlayer(args[1]);
+                        int GiveAmount = 1;
+                        player2give.getInventory().addItem(MysteryMobSpawners.getItemStack());
+                        String new_Chunk_Buster_Received = i.Mystery_Mob_Spawner_Received;
+                        String new_Mystery_Mob_Spawner_Give_Success = i.Mystery_Mob_Spawner_Give_Success;
+                        if (new_Mystery_Mob_Spawner_Give_Success.contains("{amount}")) {
+                            new_Mystery_Mob_Spawner_Give_Success = new_Mystery_Mob_Spawner_Give_Success.replace("{amount}", GiveAmount + "");
+                        }
+                        if (new_Mystery_Mob_Spawner_Give_Success.contains("{player}")) {
+                            new_Mystery_Mob_Spawner_Give_Success = new_Mystery_Mob_Spawner_Give_Success.replace("{player}", player2give.getName() + "");
+                        }
 
-                    if (new_Chunk_Buster_Received.contains("{amount}")) {
-                        new_Chunk_Buster_Received = new_Chunk_Buster_Received.replace("{amount}", GiveAmount + "");
+                        if (new_Chunk_Buster_Received.contains("{amount}")) {
+                            new_Chunk_Buster_Received = new_Chunk_Buster_Received.replace("{amount}", GiveAmount + "");
+                        }
+                        if (new_Chunk_Buster_Received.contains("{player}")) {
+                            new_Chunk_Buster_Received = new_Chunk_Buster_Received.replace("{player}", sender.getName() + "");
+                        }
+                        player2give.sendMessage(color(new_Chunk_Buster_Received));
+                        sender.sendMessage(color(new_Mystery_Mob_Spawner_Give_Success));
+
+                    } catch (Exception error) {
+                        sender.sendMessage(color(i.Mystery_Mob_Spawner_Give_Unknown_Member_Error));
+                        return true;
+
                     }
-                    if (new_Chunk_Buster_Received.contains("{player}")) {
-                        new_Chunk_Buster_Received = new_Chunk_Buster_Received.replace("{player}", sender.getName() + "");
-                    }
-                    player2give.sendMessage(color(new_Chunk_Buster_Received));
-                    sender.sendMessage(color(new_Mystery_Mob_Spawner_Give_Success));
-
-                } catch (Exception error) {
-                    sender.sendMessage(color(i.Mystery_Mob_Spawner_Give_Unknown_Member_Error));
-                    return true;
-
-                }
-                return true;
-
-            }
-            if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
-                if (!sender.hasPermission("mms.give") || (!sender.isOp())) {
-                    sender.sendMessage(color(i.Mystery_Mob_Spawner_Give_No_Permission));
                     return true;
                 } else {
+                    sender.sendMessage(color(i.Mystery_Mob_Spawner_Give_No_Permission));
+                    return true;
+                }
+            }
+            if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
+                if (sender.hasPermission("mms.give") || (sender.isOp()) || isConsole || sender.getName().equalsIgnoreCase("console")) {
                     String GiveAmount = "1";
                     try {
                         GiveAmount = args[2];
@@ -118,11 +121,14 @@ public class GiveMysteryMob implements CommandExecutor {
 
                     }
                     return true;
+                } else {
+                    sender.sendMessage(color(i.Mystery_Mob_Spawner_Give_No_Permission));
+                    return true;
                 }
             }
 
             if (args.length > 0 && args[0].equalsIgnoreCase("reload")) {
-                if (sender.hasPermission("mms.reload") || sender.isOp()) {
+                if (sender.hasPermission("mms.reload") || sender.isOp() || isConsole || sender.getName().equalsIgnoreCase("console")) {
                     sender.sendMessage(color(i.Reload_Successful));
                     i.loadConfig();
                     return true;

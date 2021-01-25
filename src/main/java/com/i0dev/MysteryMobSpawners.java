@@ -4,6 +4,7 @@ import com.i0dev.cmd.GiveMysteryMob;
 import com.i0dev.engine.MysteryPlace;
 import com.i0dev.util.ChunkLoading;
 import com.i0dev.util.CreateItemStack;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,7 +23,7 @@ public final class MysteryMobSpawners extends JavaPlugin {
         getConfig().options().copyDefaults(true);
         saveConfig();
         loadConfig();
-        loadSpawnerChances();
+        Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> loadSpawnerChances(getConfig().getConfigurationSection("spawners")), 200L) ;
     }
 
     @Override
@@ -70,8 +71,7 @@ public final class MysteryMobSpawners extends JavaPlugin {
     }
 
 
-    public void loadSpawnerChances() {
-        ConfigurationSection mobsSection = this.getConfig().getConfigurationSection("spawners");
+    public void loadSpawnerChances(ConfigurationSection mobsSection) {
 
         for (String mob : mobsSection.getKeys(false)) {
             this.spawnerChances.put(mob, mobsSection.getDouble(mob + ".chance"));
