@@ -28,7 +28,7 @@ public final class MysteryMobSpawners extends JavaPlugin {
             loadSpawnerChances(getConfig().getConfigurationSection("spawners"));
             System.out.println("Enabled Mystery Mob Spawners");
 
-        }, 20L) ;
+        }, 100L) ;
     }
 
     @Override
