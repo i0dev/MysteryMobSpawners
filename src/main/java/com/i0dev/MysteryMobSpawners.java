@@ -15,15 +15,20 @@ import java.util.HashMap;
 public final class MysteryMobSpawners extends JavaPlugin {
     @Override
     public void onEnable() {
-        System.out.println("Enabled Mystery Mob Spawners");
-        getServer().getPluginManager().registerEvents(new MysteryPlace(this), this);
-        chunkLoading = new ChunkLoading(this);
-        getServer().getPluginManager().registerEvents(chunkLoading, this);
-        getCommand("mms").setExecutor(new GiveMysteryMob(this));
         getConfig().options().copyDefaults(true);
         saveConfig();
         loadConfig();
-        Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> loadSpawnerChances(getConfig().getConfigurationSection("spawners")), 200L) ;
+        System.out.println("Started Loading Mystery Mob Spawners");
+
+        Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> {
+            getServer().getPluginManager().registerEvents(new MysteryPlace(this), this);
+            chunkLoading = new ChunkLoading(this);
+            getServer().getPluginManager().registerEvents(chunkLoading, this);
+            getCommand("mms").setExecutor(new GiveMysteryMob(this));
+            loadSpawnerChances(getConfig().getConfigurationSection("spawners"));
+            System.out.println("Enabled Mystery Mob Spawners");
+
+        }, 20L) ;
     }
 
     @Override
@@ -72,9 +77,8 @@ public final class MysteryMobSpawners extends JavaPlugin {
 
 
     public void loadSpawnerChances(ConfigurationSection mobsSection) {
-
         for (String mob : mobsSection.getKeys(false)) {
-            this.spawnerChances.put(mob, mobsSection.getDouble(mob + ".chance"));
+            spawnerChances.put(mob, mobsSection.getDouble(mob + ".chance"));
         }
 
     }
